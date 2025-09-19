@@ -33,6 +33,7 @@ restic \
   --include "/.movement/maptos-storage" \
   --include "/.movement/movement-da-db" \
   --include "/.movement/default_signer_address_whitelist" \
+  --exclude-xattr security.selinux \
   -o s3.unsafe-anonymous-auth=true
 
 echo "Restore complete."
