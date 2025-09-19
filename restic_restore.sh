@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-NETWORK_NAME=${1:-"testnet"}
-RESTORE_PATH=${2:-"$HOME/.movement"}
+NETWORK_NAME="${1:-testnet}"
+RESTORE_PATH="${2:-$HOME/.movement}"
 
 export AWS_REGION="us-west-2"
 export RESTIC_PASSWORD="movebackup"
