@@ -26,8 +26,8 @@ Each network directory contains:
 
 | Script | Description |
 |--------|-------------|
-| `l1_restore.sh` | Restore L1 (Aptos) node data from Movement Labs backups |
-| `l2_restore.sh` | Restore L2 (Movement) node data from Movement Labs backups |
+| `l1_restore.sh` | Restore L1 node data from Movement Labs backups |
+| `l2_restore.sh` | Restore L2 node data from Movement Labs backups (deperecated since l1 migration) |
 
 ### L1 Database Restore
 
