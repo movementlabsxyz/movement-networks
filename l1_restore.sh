@@ -60,9 +60,24 @@ echo "Starting restore of latest snapshot..."
 echo "This may take several hours depending on your network speed."
 echo ""
 
-restic restore latest \
+# Resolve the latest snapshot ID explicitly before restoring.
+# Using `restic restore latest --path <path>` would filter by backup source path,
+# which breaks when the backup structure changes (e.g. db subdirs backed up
+# separately instead of the parent /opt/data/aptos directory). Resolving the ID
+# first ensures we always restore the most recent snapshot regardless of how the
+# source paths are organised.
+SNAPSHOT_ID=$(restic snapshots --latest 1 --no-lock -o s3.unsafe-anonymous-auth=true --json 2>/dev/null | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+
+if [ -z "$SNAPSHOT_ID" ]; then
+  echo "Error: Could not determine latest snapshot ID"
+  exit 1
+fi
+
+echo "Restoring snapshot: $SNAPSHOT_ID"
+echo ""
+
+restic restore "$SNAPSHOT_ID" \
   --target "$RESTORE_PATH" \
-  --path /opt/data/aptos \
   --no-lock \
   -o s3.unsafe-anonymous-auth=true
 
