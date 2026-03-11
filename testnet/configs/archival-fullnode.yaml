@@ -34,12 +34,12 @@ storage:
 
 full_node_networks:
   - network_id: "public"
-    discovery_method: "none"
+    discovery_method: "onchain"
     listen_address: "/ip4/0.0.0.0/tcp/6182"
     seeds:
-      9967EBF40AC8C2CCB38709488952DA1826176584EA3067B63B1695362ECB3D1F:
+      87d46ec39f5b359cf510bbcfad64746869f08a71aafabcca3ae6203de70cc3ca:
         addresses:
-          - "/dns/consensus.testnet.movementnetwork.xyz/tcp/6182/noise-ik/9967EBF40AC8C2CCB38709488952DA1826176584EA3067B63B1695362ECB3D1F/handshake/0"
+          - "/dns/vfn-02.nodes.testnet.movementnetwork.xyz/tcp/6182/noise-ik/0x9264dad024936304469b904b8c80366246dff8121de2cfa4cacad96d67b85f06/handshake/0"
         role: "Upstream"
 
 api:
