@@ -24,29 +24,47 @@ Each network directory contains:
 
 ## Restore Scripts
 
-| Script | Description |
-|--------|-------------|
-| `l1_restore.sh` | Restore L1 node data from Movement Labs backups |
-| `l2_restore.sh` | Restore L2 node data from Movement Labs backups (deperecated since l1 migration) |
+| Script                | Description                                                                |
+|-----------------------|----------------------------------------------------------------------------|
+| `database-restore.sh` | **Recommended.** Native restore from continuous backup via aptos-debugger. |
+| `l1_restore.sh`       | Deprecated. Restic restore from the legacy snapshot pipeline.              |
+| `l2_restore.sh`       | Deprecated (since L1 migration).                                           |
 
-### L1 Database Restore
+### Database Restore
 
 To bootstrap a fullnode or archival node with existing blockchain data:
 
 ```bash
 # For testnet (default)
-./l1_restore.sh testnet ./data
+./database-restore.sh testnet ./data
 
 # For mainnet
-./l1_restore.sh mainnet ./data
+./database-restore.sh mainnet ./data
+
+# Wipe an existing restore target and start fresh
+./database-restore.sh mainnet ./data --force
+
+# Use s5cmd for a much faster metadata phase (requires s5cmd installed)
+./database-restore.sh testnet ./data --downloader=s5cmd
 ```
 
 **Prerequisites:**
 
-- [restic](https://restic.net/) installed
-- Sufficient disk space (mainnet ~700GB, testnet ~260GB)
+- `aptos-debugger` from the [latest movementlabsxyz/aptos-core release](https://github.com/movementlabsxyz/aptos-core/releases/latest)
+- [AWS CLI](https://aws.amazon.com/cli/) (`aws s3` is used for anonymous reads against the public backup bucket — no AWS credentials required)
+- [s5cmd](https://github.com/peak/s5cmd) — only required if you pass `--downloader=s5cmd`. The default `--downloader=debugger` path uses aws-cli alone.
+- Sufficient disk space:
 
-The backups are updated hourly and maintain 14 days of snapshot history.
+  | Network | Restore size | `--downloader=s5cmd` | `--downloader=debugger` (default) |
+  |---------|--------------|----------------------|-----------------------------------|
+  | mainnet | ~700 GB      | ~3 hours             | ~3 hours                          |
+  | testnet | ~260 GB      | ~2 hours             | ~4 hours                          |
+
+  (Mainnet's metadata index is small and barely affected by metadata-fetch speed; testnet's is much larger.)
+
+The script reads the trust waypoint from `<network>/waypoint.txt` in this directory and auto-discovers the latest restore target version from the continuous-backup bucket. The resulting database serves the full chain from genesis (`oldest_ledger_version: 0`).
+
+For the legacy restic-based flow, see [`l1_restore.sh`](./l1_restore.sh) (deprecated).
 
 ## Node Types
 
@@ -85,7 +103,7 @@ cd movement-networks
 cd mainnet  # or testnet
 
 # 3. (Optional) Restore existing data for faster sync
-../l1_restore.sh mainnet ../data
+../database-restore.sh mainnet ../data
 
 # 4. Run with Docker
 docker run --pull=always \

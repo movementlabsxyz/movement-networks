@@ -1,6 +1,18 @@
 #!/bin/bash -e
 #
-# Movement Network L1 (Aptos) Database Restore Script
+# DEPRECATED — see database-restore.sh for the recommended restore flow.
+#
+# This script remains functional but is no longer the recommended path. It uses
+# restic snapshots from the legacy backup pipeline. The replacement,
+# database-restore.sh, restores from the continuous-backup S3 buckets using
+# aptos-debugger and produces a full-history archival DB from genesis (no
+# restic dependency).
+#
+# See README.md in this directory for the recommended flow.
+#
+# -----------------------------------------------------------------------------
+#
+# Movement Network L1 (Aptos) Database Restore Script (legacy / restic-based)
 #
 # This script restores aptos-node data from Movement Labs' public restic backups.
 # Use this to bootstrap an archival node with existing blockchain data.
