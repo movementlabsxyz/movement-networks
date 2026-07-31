@@ -78,7 +78,7 @@ For detailed deployment instructions, see the Movement documentation:
 
 ```bash
 # 1. Clone this repository
-git clone https://github.com/movementlabsxyz/movement-networks.git
+git clone https://github.com/movement-network/movement-networks.git
 cd movement-networks
 
 # 2. Choose your network (mainnet or testnet)
@@ -94,6 +94,6 @@ docker run --pull=always \
   -v $(pwd)/../data:/opt/aptos/data \
   --workdir /opt/aptos \
   --name=movement-fullnode \
-  ghcr.io/movementlabsxyz/aptos-node:f24a5bc \
+  ghcr.io/movement-network/aptos-node:f24a5bc \
   -f /opt/aptos/configs/fullnode.yaml
 ```
